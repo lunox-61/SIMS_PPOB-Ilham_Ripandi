@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /   # Sesuaikan dengan folder kamu (misalnya / jika di root, atau /myproject/ jika dalam subfolder)
+
+    # Hilangkan index.php dari URL
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
