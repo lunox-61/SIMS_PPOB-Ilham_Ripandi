@@ -17,7 +17,7 @@ class App extends BaseConfig
      * E.g., http://example.com/
      */
     // public string $baseURL = 'http://localhost:8080/';
-    public string $baseURL = 'https://his-ppob_ilham_ripandi.railway.app/';
+    public string $baseURL = 'simsppob-ir.up.railway.app';
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
