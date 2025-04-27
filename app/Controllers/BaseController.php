@@ -35,7 +35,7 @@ abstract class BaseController extends Controller
      *
      * @var list<string>
      */
-    protected $helpers = [];
+    protected $helpers = ['url', 'form'];
 
     /**
      * Be sure to declare properties for any property fetch you initialized.
@@ -46,6 +46,18 @@ abstract class BaseController extends Controller
     /**
      * @return void
      */
+    protected function getCurrentUser()
+    {
+        $userId = session('user_id');
+
+        if (!$userId) {
+            return null;
+        }
+
+        $userModel = new \App\Models\UserModel();
+        return $userModel->find($userId);
+    }
+
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         // Do Not Edit This Line

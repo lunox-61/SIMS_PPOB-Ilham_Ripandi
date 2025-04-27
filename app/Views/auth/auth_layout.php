@@ -54,13 +54,31 @@
     .text-center.mb-4 {
       margin-bottom: 1.5rem;
     }
+
+    .form-icon, .form-password-toggle {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      color: #adb5bd;
+    }
+    .form-icon { left: 15px; }
+    .form-password-toggle { right: 15px; cursor: pointer; }
+    input.is-invalid + .form-password-toggle {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .input-error-icon {
+      color: #dc3545; /* warna merah Bootstrap */
+    }
   </style>
 </head>
 <body>
 
 <div class="container-fluid">
   <div class="row full-height">
-    <!-- Left Section -->
+    <!-- Form Section -->
     <div class="col-md-6 d-flex align-items-center justify-content-center p-4">
       <div class="w-100" style="max-width: 400px;">
         <div class="text-center mb-4">
@@ -70,31 +88,19 @@
           </div>
         </div>
 
-        <!-- Konten Halaman yang Dinamis -->
+        <!-- Konten Halaman yang Dinamis Ada Disini Untuk Sesi Auth -->
         <?= $content ?>
 
       </div>
     </div>
 
-    <!-- Right Section -->
+    <!-- Image Section -->
     <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center bg-red-50">
       <img src="assets/Illustrasi Login.png" alt="Illustration" class="img-fluid" style="max-width: 72%;">
     </div>
   </div>
 </div>
-
-<script>
-  // Toggle show/hide password functionality
-  document.querySelectorAll(".form-password-toggle").forEach(function(toggle) {
-    toggle.addEventListener("click", function(e) {
-      const input = this.previousElementSibling;
-      const type = input.type === "password" ? "text" : "password";
-      input.type = type;
-      this.classList.toggle("bi-eye");
-      this.classList.toggle("bi-eye-slash");
-    });
-  });
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

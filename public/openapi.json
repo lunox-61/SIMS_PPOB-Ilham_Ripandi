@@ -1,0 +1,921 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SIMS PPOB API",
+    "version": "1.0.0",
+    "description": "Dokumentasi API SIMS PPOB untuk Modul Membership"
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/registration": {
+      "post": {
+        "tags": ["1. Module Membership"],
+        "summary": "Register akun pengguna baru",
+        "description": "API ini digunakan untuk mendaftarkan akun baru ke dalam sistem SIMS PPOB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "first_name", "last_name", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "janedoe@example.com"
+                  },
+                  "first_name": {
+                    "type": "string",
+                    "example": "Jane"
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "example": "Doe"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "SecurePass123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Registrasi berhasil",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Registrasi berhasil, silakan login."
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true,
+                      "example": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Permintaan tidak valid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 102
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Alamat email sudah terdaftar."
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true,
+                      "example": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "post": {
+        "tags": ["1. Module Membership"],
+        "summary": "Login untuk mendapatkan JWT Token",
+        "description": "Login untuk mendapatkan token JWT",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "janedoe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "SecurePass123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login Sukses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login Sukses"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 102
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Parameter email tidak sesuai format"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true,
+                      "example": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 103
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Username atau password salah"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true,
+                      "example": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/profile": {
+      "get": {
+        "tags": ["1. Module Membership"],
+        "summary": "Get Profile User",
+        "description": "Mengambil data profile user berdasarkan token JWT.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sukses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "integer", "example": 0 },
+                    "message": { "type": "string", "example": "Sukses" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "email": { "type": "string", "example": "janedoe@example.com" },
+                        "first_name": { "type": "string", "example": "Jane" },
+                        "last_name": { "type": "string", "example": "Doe" },
+                        "profile_image": { "type": "string", "example": "https://yoururlapi.com/profile.jpeg" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "integer", "example": 108 },
+                    "message": { "type": "string", "example": "Token tidak valid atau kadaluwarsa" },
+                    "data": { "type": "object", "nullable": true, "example": null }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/profile/update": {
+	  "put": {
+	    "tags": ["1. Module Membership"],
+	    "summary": "Update Profile User",
+	    "description": "API ini digunakan untuk mengupdate data profile user berdasarkan token JWT.",
+	    "security": [
+	      {
+	        "bearerAuth": []
+	      }
+	    ],
+	    "requestBody": {
+	      "required": true,
+	      "content": {
+	        "application/json": {
+	          "schema": {
+	            "type": "object",
+	            "properties": {
+	              "first_name": {
+	                "type": "string",
+	                "example": "Jane Edited"
+	              },
+	              "last_name": {
+	                "type": "string",
+	                "example": "Doe Edited"
+	              }
+	            },
+	            "required": ["first_name", "last_name"]
+	          }
+	        }
+	      }
+	    },
+	    "responses": {
+	      "200": {
+	        "description": "Update berhasil",
+	        "content": {
+	          "application/json": {
+	            "schema": {
+	              "type": "object",
+	              "properties": {
+	                "status": {
+	                  "type": "integer",
+	                  "example": 0
+	                },
+	                "message": {
+	                  "type": "string",
+	                  "example": "Update Profile berhasil"
+	                },
+	                "data": {
+	                  "type": "object",
+	                  "properties": {
+	                    "email": {
+	                      "type": "string",
+	                      "format": "email",
+	                      "example": "janedoe@example.com"
+	                    },
+	                    "first_name": {
+	                      "type": "string",
+	                      "example": "Jane Edited"
+	                    },
+	                    "last_name": {
+	                      "type": "string",
+	                      "example": "Doe Edited"
+	                    },
+	                    "profile_image": {
+	                      "type": "string",
+	                      "format": "uri",
+	                      "example": "https://yoururlapi.com/profile.jpeg"
+	                    }
+	                  }
+	                }
+	              }
+	            }
+	          }
+	        }
+	      },
+	      "401": {
+	        "description": "Unauthorized",
+	        "content": {
+	          "application/json": {
+	            "schema": {
+	              "type": "object",
+	              "properties": {
+	                "status": {
+	                  "type": "integer",
+	                  "example": 108
+	                },
+	                "message": {
+	                  "type": "string",
+	                  "example": "Token tidak valid atau kadaluwarsa"
+	                },
+	                "data": {
+	                  "type": "object",
+	                  "nullable": true,
+	                  "example": null
+	                }
+	              }
+	            }
+	          }
+	        }
+	      }
+	    }
+	  }
+	},
+	"/api/profile/image": {
+	  "post": {
+	    "tags": ["1. Module Membership"],
+	    "summary": "Upload Profile Image",
+	    "description": "API ini digunakan untuk mengupdate / upload gambar profil user berdasarkan token JWT.",
+	    "security": [
+	      {
+	        "bearerAuth": []
+	      }
+	    ],
+	    "requestBody": {
+	      "required": true,
+	      "content": {
+	        "multipart/form-data": {
+	          "schema": {
+	            "type": "object",
+	            "properties": {
+	              "file": {
+	                "type": "string",
+	                "format": "binary",
+	                "description": "Upload file gambar dalam format JPEG atau PNG"
+	              }
+	            },
+	            "required": ["file"]
+	          }
+	        }
+	      }
+	    },
+	    "responses": {
+	      "200": {
+	        "description": "Update Profile Image berhasil",
+	        "content": {
+	          "application/json": {
+	            "schema": {
+	              "type": "object",
+	              "properties": {
+	                "status": { "type": "integer", "example": 0 },
+	                "message": { "type": "string", "example": "Update Profile Image berhasil" },
+	                "data": {
+	                  "type": "object",
+	                  "properties": {
+	                    "email": { "type": "string", "example": "janedoe@example.com" },
+	                    "first_name": { "type": "string", "example": "Jane Edited" },
+	                    "last_name": { "type": "string", "example": "Doe Edited" },
+	                    "profile_image": { "type": "string", "example": "https://yoururlapi.com/profile-updated.jpeg" }
+	                  }
+	                }
+	              }
+	            }
+	          }
+	        }
+	      },
+	      "400": {
+	        "description": "Format Image tidak sesuai",
+	        "content": {
+	          "application/json": {
+	            "schema": {
+	              "type": "object",
+	              "properties": {
+	                "status": { "type": "integer", "example": 102 },
+	                "message": { "type": "string", "example": "Format Image tidak sesuai" },
+	                "data": { "type": "object", "nullable": true, "example": null }
+	              }
+	            }
+	          }
+	        }
+	      },
+	      "401": {
+	        "description": "Unauthorized",
+	        "content": {
+	          "application/json": {
+	            "schema": {
+	              "type": "object",
+	              "properties": {
+	                "status": { "type": "integer", "example": 108 },
+	                "message": { "type": "string", "example": "Token tidak valid atau kadaluwarsa" },
+	                "data": { "type": "object", "nullable": true, "example": null }
+	              }
+	            }
+	          }
+	        }
+	      }
+	    }
+	  }
+	},
+	"/api/banner": {
+      "get": {
+        "tags": ["2. Module Information"],
+        "summary": "Get Banner List",
+        "description": "API ini digunakan untuk mendapatkan list banner. Tidak memerlukan token untuk mengakses.",
+        "responses": {
+          "200": {
+            "description": "Request Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "integer", "example": 0 },
+                    "message": { "type": "string", "example": "Sukses" },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "banner_name": { "type": "string", "example": "Banner 1" },
+                          "banner_image": { "type": "string", "example": "https://yoururlapi.com/uploads/Banner-1.png" },
+                          "description": { "type": "string", "example": "Lerem Ipsum Dolor sit amet" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/services": {
+      "get": {
+        "tags": ["2. Module Information"],
+        "summary": "Get Service List",
+        "description": "API ini digunakan untuk mendapatkan list service PPOB. Memerlukan token JWT untuk mengakses.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "integer", "example": 0 },
+                    "message": { "type": "string", "example": "Sukses" },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "service_code": { "type": "string", "example": "PAJAK" },
+                          "service_name": { "type": "string", "example": "Pajak PBB" },
+                          "service_icon": { "type": "string", "example": "https://yoururlapi.com/assets/PBB.png" },
+                          "service_tariff": { "type": "integer", "example": 40000 }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "integer", "example": 108 },
+                    "message": { "type": "string", "example": "Token tidak valid atau kadaluwarsa" },
+                    "data": { "type": "object", "nullable": true, "example": null }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/balance": {
+	  "get": {
+	    "tags": ["3. Module Transaction"],
+	    "summary": "Get Balance User",
+	    "description": "API ini digunakan untuk mendapatkan saldo terakhir user berdasarkan token JWT.",
+	    "security": [
+	      {
+	        "bearerAuth": []
+	      }
+	    ],
+	    "responses": {
+	      "200": {
+	        "description": "Get Balance Berhasil",
+	        "content": {
+	          "application/json": {
+	            "schema": {
+	              "type": "object",
+	              "properties": {
+	                "status": { "type": "integer", "example": 0 },
+	                "message": { "type": "string", "example": "Get Balance Berhasil" },
+	                "data": {
+	                  "type": "object",
+	                  "properties": {
+	                    "balance": { "type": "integer", "example": 1000000 }
+	                  }
+	                }
+	              }
+	            }
+	          }
+	        }
+	      },
+	      "401": {
+	        "description": "Unauthorized",
+	        "content": {
+	          "application/json": {
+	            "schema": {
+	              "type": "object",
+	              "properties": {
+	                "status": { "type": "integer", "example": 108 },
+	                "message": { "type": "string", "example": "Token tidak valid atau kadaluwarsa" },
+	                "data": { "type": "object", "nullable": true, "example": null }
+	              }
+	            }
+	          }
+	        }
+	      }
+	    }
+	  }
+	},
+	"/api/topup": {
+	    "post": {
+	      "tags": ["3. Module Transaction"],
+	      "summary": "Top Up Balance",
+	      "description": "API ini digunakan untuk melakukan top up balance. Menggunakan Bearer Token JWT.",
+	      "security": [
+	        {
+	          "bearerAuth": []
+	        }
+	      ],
+	      "requestBody": {
+	        "required": true,
+	        "content": {
+	          "application/json": {
+	            "schema": {
+	              "type": "object",
+	              "properties": {
+	                "top_up_amount": {
+	                  "type": "integer",
+	                  "example": 1000000,
+	                  "description": "Jumlah saldo yang ingin di-top up"
+	                }
+	              },
+	              "required": ["top_up_amount"]
+	            }
+	          }
+	        }
+	      },
+	      "responses": {
+	        "200": {
+	          "description": "Top Up Balance berhasil",
+	          "content": {
+	            "application/json": {
+	              "schema": {
+	                "type": "object",
+	                "properties": {
+	                  "status": {
+	                    "type": "integer",
+	                    "example": 0
+	                  },
+	                  "message": {
+	                    "type": "string",
+	                    "example": "Top Up Balance berhasil"
+	                  },
+	                  "data": {
+	                    "type": "object",
+	                    "properties": {
+	                      "balance": {
+	                        "type": "integer",
+	                        "example": 2000000
+	                      }
+	                    }
+	                  }
+	                }
+	              }
+	            }
+	          }
+	        },
+	        "400": {
+	          "description": "Bad Request (Amount tidak valid)",
+	          "content": {
+	            "application/json": {
+	              "schema": {
+	                "type": "object",
+	                "properties": {
+	                  "status": {
+	                    "type": "integer",
+	                    "example": 102
+	                  },
+	                  "message": {
+	                    "type": "string",
+	                    "example": "Paramter amount hanya boleh angka dan tidak boleh lebih kecil dari 0"
+	                  },
+	                  "data": {
+	                    "type": "object",
+	                    "nullable": true,
+	                    "example": null
+	                  }
+	                }
+	              }
+	            }
+	          }
+	        },
+	        "401": {
+	          "description": "Unauthorized (Token tidak valid atau kadaluwarsa)",
+	          "content": {
+	            "application/json": {
+	              "schema": {
+	                "type": "object",
+	                "properties": {
+	                  "status": {
+	                    "type": "integer",
+	                    "example": 108
+	                  },
+	                  "message": {
+	                    "type": "string",
+	                    "example": "Token tidak valid atau kadaluwarsa"
+	                  },
+	                  "data": {
+	                    "type": "object",
+	                    "nullable": true,
+	                    "example": null
+	                  }
+	                }
+	              }
+	            }
+	          }
+	        }
+	      }
+	    }
+	},
+	"/api/transaction": {
+    "post": {
+      "tags": ["3. Module Transaction"],
+      "summary": "Transaction Service",
+      "description": "API ini digunakan untuk melakukan transaksi service PPOB. Menggunakan Bearer Token JWT.",
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "service_code": {
+                  "type": "string",
+                  "example": "PULSA",
+                  "description": "Kode layanan yang dipilih untuk transaksi"
+                }
+              },
+              "required": ["service_code"]
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Transaksi Berhasil",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Transaksi berhasil"
+                  },
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "invoice_number": {
+                        "type": "string",
+                        "example": "INV17082023-001"
+                      },
+                      "service_code": {
+                        "type": "string",
+                        "example": "PLN_PRABAYAR"
+                      },
+                      "service_name": {
+                        "type": "string",
+                        "example": "PLN Prabayar"
+                      },
+                      "transaction_type": {
+                        "type": "string",
+                        "example": "PAYMENT"
+                      },
+                      "total_amount": {
+                        "type": "integer",
+                        "example": 10000
+                      },
+                      "created_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-08-17T10:10:10.000Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request (Service tidak ditemukan)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer",
+                    "example": 102
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Service atau Layanan tidak ditemukan"
+                  },
+                  "data": {
+                    "type": "object",
+                    "nullable": true,
+                    "example": null
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Unauthorized (Token tidak valid atau kadaluwarsa)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer",
+                    "example": 108
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Token tidak valid atau kadaluwarsa"
+                  },
+                  "data": {
+                    "type": "object",
+                    "nullable": true,
+                    "example": null
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  	},
+  	"/api/transaction/history": {
+      "get": {
+        "tags": ["3. Module Transaction"],
+        "summary": "Get History Transaction",
+        "description": "API ini digunakan untuk mendapatkan history transaksi berdasarkan token JWT.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": { "type": "integer", "example": 0 },
+            "required": false
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "example": 3 },
+            "required": false
+          }
+        ],
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get History Transaksi berhasil",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "integer", "example": 0 },
+                    "message": { "type": "string", "example": "Get History Berhasil" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "offset": { "type": "integer", "example": 0 },
+                        "limit": { "type": "integer", "example": 3 },
+                        "records": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "invoice_number": { "type": "string", "example": "INV17082023-001" },
+                              "transaction_type": { "type": "string", "example": "TOPUP" },
+                              "description": { "type": "string", "example": "Top Up balance" },
+                              "total_amount": { "type": "integer", "example": 100000 },
+                              "created_on": { "type": "string", "example": "2023-08-17T10:10:10.000Z" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "integer", "example": 108 },
+                    "message": { "type": "string", "example": "Token tidak valid atau kadaluwarsa" },
+                    "data": { "type": "object", "nullable": true, "example": null }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
