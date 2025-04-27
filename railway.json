@@ -1,0 +1,10 @@
+{
+  "build": {
+    "env": {
+      "APP_ENV": "production"
+    }
+  },
+  "deploy": {
+    "startCommand": "php -S 0.0.0.0:$PORT -t public"
+  }
+}
