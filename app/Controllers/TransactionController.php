@@ -43,31 +43,40 @@ class TransactionController extends BaseController
     {
         $user = $this->getCurrentUser();
         if (!$user) {
-            return $this->response->setJSON(['status' => 'fail', 'message' => 'Unauthorized']);
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => 'fail', 'message' => 'Unauthorized']);
+            }
+            return redirect()->to('/login');
         }
 
         $serviceCode = $this->request->getPost('service_code');
         $amount = (int) $this->request->getPost('amount');
 
         if (!$serviceCode || !$amount || $amount <= 0) {
-            return $this->response->setJSON(['status' => 'fail', 'message' => 'Data transaksi tidak valid.']);
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => 'fail', 'message' => 'Data transaksi tidak valid.']);
+            }
+            return redirect()->back()->withInput()->with('error', 'Data transaksi tidak valid.');
         }
 
         $serviceModel = new ServiceModel();
         $service = $serviceModel->where('service_code', $serviceCode)->first();
 
         if (!$service) {
-            return $this->response->setJSON(['status' => 'fail', 'message' => 'Service tidak ditemukan.']);
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => 'fail', 'message' => 'Service tidak ditemukan.']);
+            }
+            return redirect()->back()->withInput()->with('error', 'Service tidak ditemukan.');
         }
 
         if ($user['balance'] < $amount) {
-            return $this->response->setJSON(['status' => 'fail', 'message' => 'Saldo tidak cukup.']);
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => 'fail', 'message' => 'Saldo tidak cukup.']);
+            }
+            return redirect()->back()->withInput()->with('error', 'Saldo tidak cukup.');
         }
 
-        // if ($user['balance'] > $amount) {
-        //     return $this->response->setJSON(['status' => 'success', 'message' => 'Saldo cukup.']);
-        // }
-
+        // Lanjutkan proses pembayaran
         $userModel = new UserModel();
         $newBalance = $user['balance'] - $amount;
         $userModel->update($user['id'], ['balance' => $newBalance]);
@@ -83,6 +92,10 @@ class TransactionController extends BaseController
         ]);
 
         session()->set('user_balance', $newBalance);
+
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Pembayaran berhasil.']);
+        }
 
         return redirect()->to('/')->with('success', 'Pembayaran berhasil.');
     }
