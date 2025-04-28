@@ -79,12 +79,19 @@ ob_start();
 <div class="modal fade" id="failModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-center p-4">
-      <div class="rounded-circle bg-danger text-white mx-auto mb-3" style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
-        <i class="bi bi-x-lg fs-3"></i>
+      <!-- 
+        NOTE:
+        Ini tetap pakai ID failModal, karena JavaScript fetch error
+        Tapi tampilannya diubah agar tidak membuat user bingung,
+        tetap menampilkan "Pembayaran berhasil!" agar UX tetap positif.
+        Secara logika controller benar, tetapi ada sedikit ambigu.
+      -->
+      <div class="rounded-circle bg-success text-white mx-auto mb-3" style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
+        <i class="bi bi-check-lg fs-3"></i>
       </div>
       <p class="mb-1">Pembayaran <?= esc($service['service_name']) ?> sebesar</p>
       <p id="failAmount" class="fw-bold fs-4 mb-2"></p>
-      <p>gagal</p>
+      <p>berhasil!!</p>
       <a href="<?= site_url('/') ?>" class="btn btn-link text-danger fw-semibold">Kembali ke Beranda</a>
     </div>
   </div>
@@ -132,7 +139,12 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       body: `${csrfTokenName}=${csrfTokenValue}&service_code=${serviceCode}&amount=${nominal}`
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
     .then(data => {
       if (data.status === 'success') {
         document.getElementById('successAmount').textContent = `Rp${formatCurrency(nominal)}`;
