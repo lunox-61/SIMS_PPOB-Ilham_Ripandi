@@ -126,32 +126,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const serviceCode = document.querySelector('input[name="service_code"]').value;
 
     fetch('<?= site_url('transaction/' . $service_code . '/pay') ?>', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `${csrfTokenName}=${csrfTokenValue}&service_code=${serviceCode}&amount=${nominal}`
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (data.status === 'success') {
-        document.getElementById('successAmount').textContent = `Rp${formatCurrency(nominal)}`;
-        successModal.show();
-      } else {
-        document.getElementById('failAmount').textContent = `Rp${formatCurrency(nominal)}`;
-        failModal.show();
-      }
-    })
-    .catch(error => {
-      // Anggap tetap sukses kalau gagal karena fetch (redirect server)
-      document.getElementById('successAmount').textContent = `Rp${formatCurrency(nominal)}`;
-      successModal.show();
-    });
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  body: `${csrfTokenName}=${csrfTokenValue}&service_code=${serviceCode}&amount=${nominal}`
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+})
+.then(data => {
+  if (data.status === 'success') {
+    document.getElementById('successAmount').textContent = `Rp${formatCurrency(nominal)}`;
+    successModal.show();
+  } else {
+    document.getElementById('failAmount').textContent = `Rp${formatCurrency(nominal)}`;
+    failModal.show();
+  }
+})
+.catch(error => {
+  // Anggap tetap sukses kalau gagal karena fetch (redirect server)
+  document.getElementById('successAmount').textContent = `Rp${formatCurrency(nominal)}`;
+  successModal.show();
+});
   });
 });
 </script>
