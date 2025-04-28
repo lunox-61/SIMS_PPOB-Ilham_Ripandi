@@ -1,11 +1,11 @@
 <div class="row align-items-start mb-5">
   <!-- User Welcome -->
   <div class="col-12 col-md-6 mb-4 mb-md-0">
-    <div class="d-flex flex-column align-items-left text-start">
+    <div class="d-flex flex-column align-items-start text-start">
       <img src="<?= base_url(esc($user_photo)) ?>" alt="Profile avatar" width="96" height="96" class="rounded-circle mb-2">
       <div>
-        <div class="text-muted medium">Selamat datang,</div>
-        <div class="fw-semibold fs-3"><?= esc($user_fullname) ?></div>
+        <div class="text-muted small">Selamat datang,</div>
+        <div class="fw-semibold fs-4"><?= esc($user_fullname) ?></div>
       </div>
     </div>
   </div>
@@ -16,7 +16,7 @@
       <div class="mb-2 small">Saldo anda</div>
       <div class="d-flex flex-column align-items-start">
         <div class="fs-4 fw-bold mb-2" id="saldo-nominal">Rp •••••••</div>
-        <button class="btn btn-outline-light btn-sm d-flex align-items-center outline-0" id="toggle-saldo">
+        <button class="btn btn-outline-light btn-sm d-flex align-items-center" id="toggle-saldo">
           Lihat Saldo
           <i class="bi bi-eye ms-2" id="eye-icon"></i>
         </button>

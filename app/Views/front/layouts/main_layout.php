@@ -14,12 +14,16 @@
     body {
       font-family: 'Poppins', sans-serif;
     }
+
+    /* General Scroll Area */
     .scroll-area {
       display: flex;
       overflow-x: auto;
       gap: 1rem;
       padding-bottom: 1rem;
     }
+
+    /* Promo Card */
     .promo-card {
       flex: 0 0 auto;
       width: 270px;
@@ -27,9 +31,45 @@
       box-shadow: 0 0 8px rgba(0,0,0,0.05);
       border-radius: 0.5rem;
     }
-    .card-img-top {
+    .promo-card img {
       height: 121px;
       object-fit: cover;
+    }
+
+    /* Services */
+    .service-item {
+      flex: 0 0 auto;
+      width: 80px;
+      text-align: center;
+    }
+    .service-item img {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+    }
+    .service-item .small {
+      font-size: 0.8rem;
+    }
+
+    /* Responsive Adjustment */
+    @media (max-width: 768px) {
+      main.container {
+        padding: 1rem;
+      }
+      .brand-logo {
+        width: 28px;
+        height: 28px;
+      }
+      h5.fw-semibold {
+        font-size: 1.1rem;
+      }
+      .service-item img {
+        width: 56px;
+        height: 56px;
+      }
+      .service-item {
+        width: 72px;
+      }
     }
   </style>
 </head>
@@ -38,7 +78,7 @@
   <!-- Header -->
   <?php include(APPPATH . 'Views/front/layouts/header.php'); ?>
 
-  <!-- Main ada disini -->
+  <!-- Main -->
   <main class="container py-5">
     <?= $content ?>
   </main>
