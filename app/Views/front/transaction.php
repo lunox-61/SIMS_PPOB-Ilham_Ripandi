@@ -51,7 +51,9 @@ ob_start();
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-center p-4">
       <div class="rounded-circle bg-danger text-white mx-auto mb-3" style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
-        <i class="bi bi-wallet2 fs-3"></i>
+        <div class="mx-auto" style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
+          <img src="<?= base_url('assets/Logo.png') ?>" alt="Wallet Icon" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
       </div>
       <p id="confirmMessage" class="fw-semibold mb-3"></p>
       <button id="confirmPaymentButton" class="btn btn-danger mb-2">Ya, lanjutkan Bayar</button>
