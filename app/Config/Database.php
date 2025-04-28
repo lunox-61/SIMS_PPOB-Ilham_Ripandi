@@ -48,6 +48,9 @@ class Database extends Config
             'date'     => 'Y-m-d',
             'datetime' => 'Y-m-d H:i:s',
             'time'     => 'H:i:s',
+        'options' => [
+            \PDO::MYSQL_ATTR_INIT_COMMAND => "SET time_zone = '+07:00'"
+        ],
         ],
     ];
 
