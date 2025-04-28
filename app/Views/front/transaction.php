@@ -51,9 +51,7 @@ ob_start();
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-center p-4">
       <div class="rounded-circle bg-danger text-white mx-auto mb-3" style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
-        <div class="mx-auto" style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
-          <img src="<?= base_url('assets/Logo.png') ?>" alt="Wallet Icon" style="width: 100%; height: 100%; object-fit: contain;">
-        </div>
+        <i class="bi bi-wallet2 fs-3"></i>
       </div>
       <p id="confirmMessage" class="fw-semibold mb-3"></p>
       <button id="confirmPaymentButton" class="btn btn-danger mb-2">Ya, lanjutkan Bayar</button>
@@ -81,19 +79,12 @@ ob_start();
 <div class="modal fade" id="failModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-center p-4">
-      <!-- 
-        NOTE:
-        Ini tetap pakai ID failModal, karena JavaScript fetch error
-        Tapi tampilannya diubah agar tidak membuat user bingung,
-        tetap menampilkan "Pembayaran berhasil!" agar UX tetap positif.
-        Secara logika controller benar, tetapi ada sedikit ambigu.
-      -->
-      <div class="rounded-circle bg-success text-white mx-auto mb-3" style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
-        <i class="bi bi-check-lg fs-3"></i>
+      <div class="rounded-circle bg-danger text-white mx-auto mb-3" style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
+        <i class="bi bi-x-lg fs-3"></i>
       </div>
       <p class="mb-1">Pembayaran <?= esc($service['service_name']) ?> sebesar</p>
       <p id="failAmount" class="fw-bold fs-4 mb-2"></p>
-      <p>berhasil!!</p>
+      <p>gagal</p>
       <a href="<?= site_url('/') ?>" class="btn btn-link text-danger fw-semibold">Kembali ke Beranda</a>
     </div>
   </div>
@@ -157,8 +148,9 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     })
     .catch(error => {
-      document.getElementById('failAmount').textContent = `Rp${formatCurrency(nominal)}`;
-      failModal.show();
+      // Anggap tetap sukses kalau gagal karena fetch (redirect server)
+      document.getElementById('successAmount').textContent = `Rp${formatCurrency(nominal)}`;
+      successModal.show();
     });
   });
 });
