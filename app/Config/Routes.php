@@ -65,9 +65,9 @@ $routes->get('api/banner', 'BannerController::index');
 /**
  * Wilayah Auth
  */
-
-$routes->get('/login', 'Auth\LoginController::index');
-$routes->post('/login', 'Auth\LoginController::login');
-
-$routes->get('/register', 'Auth\RegisterController::index');
-$routes->post('/register/store', 'Auth\RegisterController::store');
+$routes->group('auth', ['namespace' => 'App\Controllers\Auth', 'filter' => 'auth'], function($routes) {
+    $routes->get('login', 'LoginController::index');
+    $routes->post('login', 'LoginController::login');
+    $routes->get('register', 'RegisterController::index');
+    $routes->post('register/store', 'RegisterController::store');
+});
